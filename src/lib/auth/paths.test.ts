@@ -7,6 +7,11 @@ describe('isPublicPath', () => {
     expect(isPublicPath('/auth/callback')).toBe(true)
   })
 
+  it('lets cron routes through (they check CRON_SECRET themselves)', () => {
+    expect(isPublicPath('/api/cron/trends')).toBe(true)
+    expect(isPublicPath('/api/other')).toBe(false)
+  })
+
   it('protects everything else', () => {
     expect(isPublicPath('/')).toBe(false)
     expect(isPublicPath('/youtube')).toBe(false)

@@ -31,8 +31,8 @@
 - **편집 진행 상태** — 촬영완료 → 편집중 → 검수중 → 업로드완료 칸반. 카드마다 **Notion 페이지를 연결**해 두고 클릭 한 번으로 대본·기획 페이지를 연다
 
 ### 탐색 · 영감
-- **오늘의 트렌드 추천** (YouTube)
-  - 📺 **벤치마킹 채널** — 등록한 채널의 최근 30일 인기 영상 (채널당 최대 2개)
+- **오늘의 트렌드 추천** (YouTube) — 매일 오전 6시(한국 시간)에 자동으로 새로 가져온다
+  - 📺 **벤치마킹 채널** — 등록한 채널의 최근 30일 인기 영상 (채널당 최대 2개, 최근 추천한 영상은 뒤로)
   - 🔍 **키워드 추천** — 그룹별 키워드 풀(최대 100개)을 매일 로테이션해 OR 검색
   - 제목·태그·설명에 겹치는 키워드 수로 **관련도 순위**를 매기고, 맞은 키워드를 태그로 표시
   - 겹치는 키워드(alone ⊂ living alone)는 한 번만 세고, 한 화면에 여러 주제를 섞고, 최근 7일 안에 추천한 영상은 다시 추천하지 않음 ("다시 가져오기"를 누를 때마다 새 영상)
@@ -171,13 +171,16 @@ http://localhost:3000 → 회원가입 → YouTube 대시보드.
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon(public) key |
 | `YOUTUBE_API_KEY` | YouTube Data API 키 (서버 전용, 절대 공개하지 않는다) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service_role 키 — 매일 자동 트렌드(크론)용, 서버 전용. **Project Settings → API Keys**에서 복사 |
+| `CRON_SECRET` | 크론 주소를 보호하는 임의 문자열 (16자 이상). 로컬에서는 비워 둬도 된다 |
 
 ### 5. Vercel 배포
 
 1. Vercel에서 이 GitHub 저장소를 Import 한다 (Framework: Next.js).
-2. **Environment Variables**에 위 세 값을 넣는다 (Production and Preview). `YOUTUBE_API_KEY`는 Sensitive로 표시한다.
+2. **Environment Variables**에 위 다섯 값을 넣는다 (Production and Preview). `YOUTUBE_API_KEY`·`SUPABASE_SERVICE_ROLE_KEY`·`CRON_SECRET`은 Sensitive로 표시한다.
 3. 배포 후 Supabase의 Site URL과 Redirect URLs에 배포 주소를 추가한다 (1-4 참고).
 4. 이후 `main`에 push하면 자동으로 다시 배포된다.
+5. `vercel.json`의 크론이 매일 UTC 21시(한국 시간 오전 6시)에 `/api/cron/trends`를 호출해 모든 YouTube 워크스페이스의 트렌드를 미리 가져온다. **Settings → Cron Jobs**에서 Run으로 바로 실행해 볼 수 있다.
 
 ### 폰에서 테스트하기 (로컬)
 
@@ -249,8 +252,8 @@ Screenshots are at the [top of this page](#크리에이터-대시보드).
 - **Editing progress** — kanban: Shot → Editing → In review → Uploaded. Each card can **link a Notion page** so its script/plan opens in one click
 
 ### Explore & inspiration
-- **Today's trending topics** (YouTube)
-  - 📺 **Benchmark channels** — the most-viewed videos from your chosen channels in the last 30 days (max 2 per channel)
+- **Today's trending topics** (YouTube) — refreshed automatically every day at 6 AM KST
+  - 📺 **Benchmark channels** — the most-viewed videos from your chosen channels in the last 30 days (max 2 per channel; recently shown ones go last)
   - 🔍 **Keyword picks** — a grouped keyword pool (up to 100) rotated daily into OR searches
   - Ranked by **relevance** (how many of your keywords appear in the title, tags, and description), with the matched keywords shown as tags
   - Overlapping keywords (alone ⊂ living alone) count once, topics are mixed on each screen, and videos picked in the last 7 days are skipped (every "fetch again" brings new videos)
@@ -376,7 +379,7 @@ The free quota is 10,000 units per day. One trend fetch uses about 430 units (4 
 ### 4. Run locally
 
 ```bash
-cp .env.example .env.local   # fill in the three values
+cp .env.example .env.local   # fill in the first three values (the cron ones are optional locally)
 npm install
 npm run dev
 ```
@@ -388,13 +391,16 @@ Open http://localhost:3000 → sign up → YouTube dashboard.
 | `NEXT_PUBLIC_SUPABASE_URL` | Supabase Project URL |
 | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Supabase anon (public) key |
 | `YOUTUBE_API_KEY` | YouTube Data API key (server only — never publish it) |
+| `SUPABASE_SERVICE_ROLE_KEY` | Supabase service_role key for the daily trend cron (server only; **Project Settings → API Keys**) |
+| `CRON_SECRET` | Any random string (16+ chars) that protects the cron URL. Can stay empty locally |
 
 ### 5. Deploy to Vercel
 
 1. Import this GitHub repository in Vercel (framework: Next.js).
-2. Add the three **Environment Variables** (Production and Preview); mark `YOUTUBE_API_KEY` as Sensitive.
+2. Add the five **Environment Variables** (Production and Preview); mark `YOUTUBE_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` as Sensitive.
 3. After deploying, add the deployed URL to Supabase's Site URL and Redirect URLs (see 1-4).
 4. Every push to `main` redeploys automatically.
+5. The cron in `vercel.json` calls `/api/cron/trends` daily at 21:00 UTC (6 AM KST) to prefetch trends for every YouTube workspace. Use **Settings → Cron Jobs → Run** to trigger it manually.
 
 ### Testing on a phone (local)
 
