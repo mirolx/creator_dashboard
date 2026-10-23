@@ -29,8 +29,8 @@ type TrendsOptions = { exclude?: string[] }
 
 /** 로그인한 사용자의 워크스페이스 트렌드 — 대시보드 첫 접속 시 크론이 놓친 날의 안전망. */
 export async function getTodayTrends(workspaceId: string, options: TrendsOptions = {}): Promise<TrendsResult> {
-  await requireUser()
-  return loadTrends(await createClient(), workspaceId, options)
+  const user = await requireUser()
+  return loadTrends(await createClient(), { workspaceId, userId: user.id }, options)
 }
 
 /**
@@ -38,10 +38,11 @@ export async function getTodayTrends(workspaceId: string, options: TrendsOptions
  * YouTube에서 가져와 관련도 점수와 함께 저장한다. 실패하면 저장하지 않고 가장 최근 날짜의 트렌드를 돌려준다.
  * 최근 7일과 `exclude`의 영상은 키워드 후보에서 빼고 채널 후보에서는 뒤로 미룬다.
  * 권한 확인은 호출하는 쪽(쿠키 클라이언트 + requireUser, 또는 크론의 CRON_SECRET)이 맡는다.
+ * `userId`는 워크스페이스 주인 — 크론(서비스 롤)에는 auth.uid()가 없어 user_id 기본값을 쓸 수 없으므로 직접 넣는다.
  */
 export async function loadTrends(
   supabase: SupabaseClient,
-  workspaceId: string,
+  { workspaceId, userId }: { workspaceId: string; userId: string },
   { exclude = [] }: TrendsOptions = {},
 ): Promise<TrendsResult> {
   const today = seoulDateString(new Date())
@@ -129,6 +130,7 @@ export async function loadTrends(
     if (picked.length > 0) {
       const { error } = await supabase.from('trend_topics').upsert(
         picked.map((v) => ({
+          user_id: userId,
           workspace_id: workspaceId,
           fetched_on: today,
           video_id: v.videoId,
