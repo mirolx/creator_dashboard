@@ -1,3 +1,4 @@
+import type { SupabaseClient } from '@supabase/supabase-js'
 import { requireUser } from '@/lib/auth/requireUser'
 import { seoulDateString } from '@/lib/dates'
 import { createClient } from '@/lib/supabase/server'
@@ -5,9 +6,9 @@ import type { TrendTopic } from '@/lib/types'
 import { fetchChannelVideos } from '@/lib/youtube/fetchChannelVideos'
 import { fetchKeywordVideos } from '@/lib/youtube/fetchKeywordVideos'
 import { buildOrQueries } from './buildOrQueries'
-import { excludeVideos } from './excludeVideos'
 import { pickRotation, type RotationKeyword } from './pickRotation'
 import { pickTrends } from './pickTrends'
+import { rankCandidates } from './rankCandidates'
 
 export type TrendsResult =
   | { status: 'ok'; topics: TrendTopic[] }
@@ -21,20 +22,28 @@ const KEYWORDS_PER_GROUP = 4
 const MAX_POOL = 100
 /** 서버 액션이 등록을 10개로 막지만, 직접 insert로 우회될 수 있어 조회에서도 제한한다. */
 const MAX_CHANNELS = 10
-/** 이 기간(오늘 제외) 안에 추천한 영상은 다시 추천하지 않는다. */
+/** 이 기간(오늘 제외) 안에 추천한 영상은 다시 추천하지 않는다(채널 영상은 뒤로 미룬다). */
 const RECENT_DAYS = 7
+
+type TrendsOptions = { exclude?: string[] }
+
+/** 로그인한 사용자의 워크스페이스 트렌드 — 대시보드 첫 접속 시 크론이 놓친 날의 안전망. */
+export async function getTodayTrends(workspaceId: string, options: TrendsOptions = {}): Promise<TrendsResult> {
+  await requireUser()
+  return loadTrends(await createClient(), workspaceId, options)
+}
 
 /**
  * 오늘(한국 시간) 저장된 트렌드가 있으면 그대로, 없으면 로테이션으로 고른 키워드와 벤치마킹 채널로
  * YouTube에서 가져와 관련도 점수와 함께 저장한다. 실패하면 저장하지 않고 가장 최근 날짜의 트렌드를 돌려준다.
- * 최근 7일과 `exclude`의 영상은 후보에서 뺀다.
+ * 최근 7일과 `exclude`의 영상은 키워드 후보에서 빼고 채널 후보에서는 뒤로 미룬다.
+ * 권한 확인은 호출하는 쪽(쿠키 클라이언트 + requireUser, 또는 크론의 CRON_SECRET)이 맡는다.
  */
-export async function getTodayTrends(
+export async function loadTrends(
+  supabase: SupabaseClient,
   workspaceId: string,
-  { exclude = [] }: { exclude?: string[] } = {},
+  { exclude = [] }: TrendsOptions = {},
 ): Promise<TrendsResult> {
-  await requireUser()
-  const supabase = await createClient()
   const today = seoulDateString(new Date())
 
   const todays = () =>
@@ -109,8 +118,13 @@ export async function getTodayTrends(
       fetchChannelVideos({ apiKey, playlistIds, pool, boost: rotation.map((k) => k.keyword), now }),
       fetchKeywordVideos({ apiKey, queries, pool, now }),
     ])
-    const fresh = excludeVideos(channelVideos, keywordVideos, [...exclude, ...recentIds])
-    const picked = pickTrends(fresh.channel, fresh.keyword, { groupOf })
+    const ranked = rankCandidates({
+      channel: channelVideos,
+      keyword: keywordVideos,
+      recent: [...exclude, ...recentIds],
+      groupOf,
+    })
+    const picked = pickTrends(ranked.channel, ranked.keyword)
 
     if (picked.length > 0) {
       const { error } = await supabase.from('trend_topics').upsert(

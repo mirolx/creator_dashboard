@@ -20,7 +20,7 @@ describe('fetchChannelVideos', () => {
     expect(call.searchParams.get('part')).toBe('contentDetails')
   })
 
-  it('keeps last-30-day videos over 180s, sorted by views, at most 2 per channel', async () => {
+  it('keeps last-30-day videos over 180s, sorted by views, without a per-channel cap', async () => {
     const yt = fakeYouTube({
       playlists: { UUa: ['a1', 'a2', 'a3', 'aOld', 'aShort'], UUb: ['b1'] },
       videos: [
@@ -35,7 +35,7 @@ describe('fetchChannelVideos', () => {
     const result = await fetchChannelVideos({ apiKey: 'k', playlistIds: ['UUa', 'UUb'], pool: [], now, fetchImpl: asFetch(yt) })
 
     // 카테고리 필터 없음 (b1은 음악 카테고리지만 남는다)
-    expect(result.map((v) => v.videoId)).toEqual(['a1', 'a2', 'b1'])
+    expect(result.map((v) => v.videoId)).toEqual(['a1', 'a2', 'b1', 'a3'])
   })
 
   it('skips a deleted or private channel (404) and keeps the others', async () => {
@@ -56,7 +56,7 @@ describe('fetchChannelVideos', () => {
     expect(result.map((v) => v.videoId)).toEqual(['b1'])
   })
 
-  it('ranks by relevance before views, then applies the per-channel cap', async () => {
+  it('ranks by relevance before views', async () => {
     const yt = fakeYouTube({
       playlists: { UUa: ['popular', 'onNiche1', 'onNiche2'] },
       videos: [

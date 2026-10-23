@@ -71,16 +71,8 @@ describe('diverseOrder', () => {
   })
 })
 
-describe('pickTrends with groupOf', () => {
-  it('prefers different groups and fills with the rest when short', () => {
-    const channel = [m('c0', ['living alone']), m('c1', ['alone']), m('c2', ['living alone']), m('c3', ['storytelling'])]
-    const result = pickTrends(channel, [], { groupOf, perSource: 2, total: 3 })
-    expect(ids(result)).toEqual(['c:c0', 'c:c3', 'c:c1'])
-  })
-
-  it('keeps single-keyword videos behind better matches', () => {
-    const keyword = [m('k0', ['living alone'], 6), m('k1', ['alone'], 5), m('k2', ['2026'], 2)]
-    const result = pickTrends([], keyword, { groupOf, perSource: 2, total: 2 })
-    expect(ids(result)).toEqual(['k:k0', 'k:k1'])
+describe('pickTrends options', () => {
+  it('respects perSource and total', () => {
+    expect(ids(pickTrends(many('c', 3), many('k', 3), { perSource: 1, total: 2 }))).toEqual(['c:c0', 'k:k0'])
   })
 })

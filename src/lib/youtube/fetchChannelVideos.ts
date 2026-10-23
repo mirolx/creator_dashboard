@@ -8,16 +8,14 @@ import {
 } from './api'
 
 const WINDOW_MS = 30 * 24 * 60 * 60 * 1000
-/** 한 채널이 추천 자리를 독차지하지 않도록 채널당 이 개수까지만 고른다. */
-export const MAX_PER_CHANNEL = 2
 /** 오늘 로테이션 키워드와 맞으면 정렬할 때 키워드당 더하는 점수 (저장되는 relevance에는 넣지 않는다). */
 export const BOOST_POINTS = 2
 
 type PlaylistItemsResponse = { items?: { contentDetails?: { videoId?: string } }[] }
 
 /**
- * 채널 업로드 목록에서 최근 영상을 읽어, 최근 30일·3분 초과 영상을 관련도 → 조회수 순으로
- * 채널당 최대 2개씩 돌려준다. 할당량: 채널당 1 unit + videos 1 unit/50개.
+ * 채널 업로드 목록에서 최근 영상을 읽어, 최근 30일·3분 초과 영상을 관련도 → 조회수 순으로 모두 돌려준다.
+ * 채널당 개수 제한은 최근 추천 영상을 미룬 뒤 `rankCandidates`가 건다. 할당량: 채널당 1 unit + videos 1 unit/50개.
  * 오늘 키워드(`boost`)와 맞는 영상은 정렬에서 키워드당 2점을 더 받는다.
  */
 export async function fetchChannelVideos({
@@ -64,15 +62,7 @@ export async function fetchChannelVideos({
   const scored = scoreAll(recent, pool)
   // 키워드가 하나라도 맞는 영상이 있으면 하나도 안 맞는 영상은 뺀다 (모두 안 맞으면 그대로 둔다).
   const relevant = scored.filter((v) => v.relevance > 0)
-  const videos = (relevant.length > 0 ? relevant : scored).sort(
+  return (relevant.length > 0 ? relevant : scored).sort(
     (a, b) => sortScore(b) - sortScore(a) || b.viewCount - a.viewCount,
   )
-
-  const perChannel = new Map<string, number>()
-  return videos.filter((v) => {
-    const count = perChannel.get(v.channelId) ?? 0
-    if (count >= MAX_PER_CHANNEL) return false
-    perChannel.set(v.channelId, count + 1)
-    return true
-  })
 }
