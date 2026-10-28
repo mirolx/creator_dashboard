@@ -23,7 +23,7 @@
 
 ### 워크스페이스
 - **YouTube / Instagram 워크스페이스** 전환 — 탭을 바꾸면 데이터와 포인트 색(더스티 로즈 ↔ 더스티 라벤더)이 함께 바뀐다.
-- **한국어 / English** UI 전환, 이메일·비밀번호 및 구글 로그인.
+- **한국어 / English** UI 전환, 이메일·비밀번호 로그인.
 
 ### 오늘 할 일
 - **업로드 일정** — 촬영·편집·업로드 일정과 완료 체크
@@ -121,7 +121,7 @@
 |---|---|
 | Node.js 22.12 이상 (권장 24) | 개발 서버 |
 | Supabase 프로젝트 (무료 플랜) | DB, 로그인, 실시간 동기화 |
-| Google Cloud 프로젝트 | YouTube Data API 키, 구글 로그인 |
+| Google Cloud 프로젝트 | YouTube Data API 키 |
 
 ### 1. Supabase 설정
 
@@ -148,15 +148,7 @@
 
 하루 무료 할당량은 10,000 units. 트렌드를 한 번 가져올 때 약 430 units를 쓴다 (가장 오래 쓰지 않은 키워드 그룹 4개 × 검색 100 units + 벤치마킹 채널 최대 10개 + 영상 상세 조회). "오늘 트렌드 다시 가져오기"도 한 번에 같은 양을 쓴다. 결제 정보는 필요 없다.
 
-### 3. 구글 로그인 (선택)
-
-1. Google Cloud Console → **APIs & Services → OAuth consent screen**을 설정한다 (External, 테스트 사용자에 본인 이메일 추가).
-2. **Credentials → Create credentials → OAuth client ID** → Web application
-   - Authorized redirect URIs: `https://<프로젝트-ref>.supabase.co/auth/v1/callback`
-     (Supabase의 Authentication → Sign In / Providers → Google 화면에 정확한 주소가 표시된다)
-3. 발급된 Client ID와 Client Secret을 Supabase의 Google provider에 입력하고 활성화한다.
-
-### 4. 로컬 실행
+### 3. 로컬 실행
 
 ```bash
 cp .env.example .env.local   # 값 세 개를 채운다
@@ -174,7 +166,7 @@ http://localhost:3000 → 회원가입 → YouTube 대시보드.
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service_role 키 — 매일 자동 트렌드(크론)용, 서버 전용. **Project Settings → API Keys**에서 복사 |
 | `CRON_SECRET` | 크론 주소를 보호하는 임의 문자열 (16자 이상). 로컬에서는 비워 둬도 된다 |
 
-### 5. Vercel 배포
+### 4. Vercel 배포
 
 1. Vercel에서 이 GitHub 저장소를 Import 한다 (Framework: Next.js).
 2. **Environment Variables**에 위 다섯 값을 넣는다 (Production and Preview). `YOUTUBE_API_KEY`·`SUPABASE_SERVICE_ROLE_KEY`·`CRON_SECRET`은 Sensitive로 표시한다.
@@ -244,7 +236,7 @@ Screenshots are at the [top of this page](#크리에이터-대시보드).
 
 ### Workspaces
 - **YouTube / Instagram workspaces** — switching tabs swaps both the data and the accent color (dusty rose ↔ dusty lavender).
-- **Korean / English** UI toggle, email/password and Google sign-in.
+- **Korean / English** UI toggle, email/password sign-in.
 
 ### Today
 - **Upload schedule** — shoot/edit/upload items with done checkboxes
@@ -341,7 +333,7 @@ Rebuilt from the [Fluid Magnetic Cursor on 21st.dev](https://21st.dev/@jahed/com
 |---|---|
 | Node.js 22.12+ (24 recommended) | Dev server |
 | Supabase project (free plan) | Database, auth, realtime |
-| Google Cloud project | YouTube Data API key, Google sign-in |
+| Google Cloud project | YouTube Data API key |
 
 ### 1. Supabase
 
@@ -368,15 +360,7 @@ Rebuilt from the [Fluid Magnetic Cursor on 21st.dev](https://21st.dev/@jahed/com
 
 The free quota is 10,000 units per day. One trend fetch uses about 430 units (4 least-recently searched keyword groups × one 100-unit search + up to 10 benchmark channels + video details). "Fetch today's trends again" costs the same. No billing is required.
 
-### 3. Google sign-in (optional)
-
-1. Set up **APIs & Services → OAuth consent screen** (External; add your email as a test user).
-2. **Credentials → Create credentials → OAuth client ID** → Web application
-   - Authorized redirect URI: `https://<project-ref>.supabase.co/auth/v1/callback`
-     (the exact URL is shown under Supabase **Authentication → Sign In / Providers → Google**)
-3. Enter the Client ID and Client Secret in Supabase's Google provider and enable it.
-
-### 4. Run locally
+### 3. Run locally
 
 ```bash
 cp .env.example .env.local   # fill in the first three values (the cron ones are optional locally)
@@ -394,7 +378,7 @@ Open http://localhost:3000 → sign up → YouTube dashboard.
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service_role key for the daily trend cron (server only; **Project Settings → API Keys**) |
 | `CRON_SECRET` | Any random string (16+ chars) that protects the cron URL. Can stay empty locally |
 
-### 5. Deploy to Vercel
+### 4. Deploy to Vercel
 
 1. Import this GitHub repository in Vercel (framework: Next.js).
 2. Add the five **Environment Variables** (Production and Preview); mark `YOUTUBE_API_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, and `CRON_SECRET` as Sensitive.

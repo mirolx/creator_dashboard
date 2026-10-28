@@ -26,8 +26,6 @@
     "password": "Password (6+ characters)",
     "submitLogin": "Log in",
     "submitSignup": "Create account",
-    "or": "or",
-    "google": "Continue with Google",
     "checkEmail": "We sent you a confirmation email. Click the link to finish signing up.",
     "errors": {
       "invalidInput": "Check your email and password (6+ characters).",
