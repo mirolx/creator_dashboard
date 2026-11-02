@@ -6,9 +6,10 @@ import type { TrendTopic } from '@/lib/types'
 import { fetchChannelVideos } from '@/lib/youtube/fetchChannelVideos'
 import { fetchKeywordVideos } from '@/lib/youtube/fetchKeywordVideos'
 import { buildOrQueries } from './buildOrQueries'
+import { MAX_CHANNELS } from './limits'
 import { pickRotation, type RotationKeyword } from './pickRotation'
 import { pickTrends } from './pickTrends'
-import { rankCandidates } from './rankCandidates'
+import { lastShownDates, rankCandidates } from './rankCandidates'
 
 export type TrendsResult =
   | { status: 'ok'; topics: TrendTopic[] }
@@ -20,8 +21,6 @@ const ROTATION_GROUPS = 4
 const KEYWORDS_PER_GROUP = 4
 /** 키워드 풀 조회 상한 (등록 제한과 같은 값). */
 const MAX_POOL = 100
-/** 서버 액션이 등록을 10개로 막지만, 직접 insert로 우회될 수 있어 조회에서도 제한한다. */
-const MAX_CHANNELS = 10
 /** 이 기간(오늘 제외) 안에 추천한 영상은 다시 추천하지 않는다(채널 영상은 뒤로 미룬다). */
 const RECENT_DAYS = 7
 
@@ -89,10 +88,11 @@ export async function loadTrends(
       .select('uploads_playlist_id')
       .eq('workspace_id', workspaceId)
       .order('created_at')
+      // 서버 액션이 등록 개수를 막지만, 직접 insert로 우회될 수 있어 조회에서도 제한한다.
       .limit(MAX_CHANNELS),
     supabase
       .from('trend_topics')
-      .select('video_id')
+      .select('video_id, fetched_on')
       .eq('workspace_id', workspaceId)
       .gte('fetched_on', seoulDateString(new Date(Date.now() - RECENT_DAYS * 24 * 60 * 60 * 1000)))
       .lt('fetched_on', today),
@@ -104,7 +104,7 @@ export async function loadTrends(
 
   const pool = keywordRows.map((k) => k.keyword)
   // 최근 기록 조회가 실패해도 추천은 막지 않는다.
-  const recentIds = recentRes.error ? [] : (recentRes.data ?? []).map((r) => r.video_id as string)
+  const recentRows = recentRes.error ? [] : ((recentRes.data ?? []) as { video_id: string; fetched_on: string }[])
   const groupByKeyword = new Map(keywordRows.map((k) => [k.keyword.trim().toLowerCase(), k.group_name ?? k.keyword]))
   const groupOf = (keyword: string) => groupByKeyword.get(keyword.trim().toLowerCase()) ?? keyword
   const rotation = pickRotation(keywordRows, { groups: ROTATION_GROUPS, perGroup: KEYWORDS_PER_GROUP })
@@ -122,7 +122,7 @@ export async function loadTrends(
     const ranked = rankCandidates({
       channel: channelVideos,
       keyword: keywordVideos,
-      recent: [...exclude, ...recentIds],
+      lastShown: lastShownDates(recentRows, exclude, today),
       groupOf,
     })
     const picked = pickTrends(ranked.channel, ranked.keyword)

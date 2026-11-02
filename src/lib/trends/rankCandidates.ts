@@ -15,31 +15,48 @@ export function capPerChannel<T extends { channelId: string }>(list: T[], max = 
   })
 }
 
+/** 추천 기록에서 영상별 마지막 추천일을 구한다. 지금 화면의 영상(onScreen)은 오늘 추천한 것으로 친다. */
+export function lastShownDates(
+  rows: { video_id: string; fetched_on: string }[],
+  onScreen: string[],
+  today: string,
+): Map<string, string> {
+  const dates = new Map<string, string>()
+  for (const { video_id, fetched_on } of rows) {
+    const known = dates.get(video_id)
+    if (!known || fetched_on > known) dates.set(video_id, fetched_on)
+  }
+  for (const id of onScreen) dates.set(id, today)
+  return dates
+}
+
 /**
- * 관련도순으로 정렬된 후보를 추천 순서로 다시 줄 세운다.
- * - 채널 후보: 후보가 적어서 최근 추천 영상(recent)을 빼지 않고 뒤로 미룬 다음 채널당 2개로 자르고,
- *   안 본 영상과 본 영상을 각각 주제가 섞이게 정렬해 이어 붙인다.
+ * 관련도순으로 정렬된 후보를 추천 순서로 다시 줄 세운다. lastShown은 영상별 마지막 추천일("YYYY-MM-DD")이다.
+ * - 채널 후보: 후보가 적어서 최근 추천 영상을 빼지 않고 뒤로 미룬 다음 채널당 2개로 자른다.
+ *   안 본 영상은 주제가 섞이게 정렬하고, 본 영상은 추천한 지 오래된 순으로 둬서 같은 영상이 매일 나오지 않게 한다.
  * - 키워드 후보: 최근 추천 영상을 빼고 주제가 섞이게 정렬한다. 채널 후보도 없고 다 빠지면 빼지 않은 목록을 쓴다.
  */
 export function rankCandidates<T extends ScoredVideo>({
   channel,
   keyword,
-  recent,
+  lastShown,
   groupOf,
 }: {
   channel: T[]
   keyword: T[]
-  recent: Iterable<string>
+  lastShown: ReadonlyMap<string, string>
   groupOf: (keyword: string) => string
 }): { channel: T[]; keyword: T[] } {
-  const seen = new Set(recent)
-  const isSeen = (v: T) => seen.has(v.videoId)
+  const isSeen = (v: T) => lastShown.has(v.videoId)
   const order = (list: T[]) => diverseOrder(list, groupOf, MIN_PROMOTE_RELEVANCE)
 
-  const capped = capPerChannel([...channel.filter((v) => !isSeen(v)), ...channel.filter(isSeen)])
+  const seen = channel
+    .filter(isSeen)
+    .sort((a, b) => lastShown.get(a.videoId)!.localeCompare(lastShown.get(b.videoId)!))
+  const capped = capPerChannel([...channel.filter((v) => !isSeen(v)), ...seen])
   const freshKeyword = keyword.filter((v) => !isSeen(v))
   return {
-    channel: [...order(capped.filter((v) => !isSeen(v))), ...order(capped.filter(isSeen))],
+    channel: [...order(capped.filter((v) => !isSeen(v))), ...capped.filter(isSeen)],
     keyword: order(freshKeyword.length > 0 || capped.length > 0 ? freshKeyword : keyword),
   }
 }

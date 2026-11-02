@@ -3,13 +3,12 @@
 import { z } from 'zod'
 import { requireUser } from '@/lib/auth/requireUser'
 import { createClient } from '@/lib/supabase/server'
+import { MAX_CHANNELS } from '@/lib/trends/limits'
 import type { BenchmarkChannel } from '@/lib/types'
 import { lookupChannel, type ChannelInfo } from '@/lib/youtube/lookupChannel'
 import { parseChannelInput } from '@/lib/youtube/parseChannelInput'
 
 export type AddChannelError = 'invalid' | 'limit' | 'notFound' | 'duplicate' | 'failed'
-
-const MAX_CHANNELS = 10
 
 /** 입력(@handle·URL·채널 ID)으로 YouTube 채널을 찾아 벤치마킹 채널로 저장한다. API 키 때문에 서버에서 처리한다. */
 export async function addBenchmarkChannel(

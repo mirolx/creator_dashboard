@@ -163,12 +163,12 @@
     "refetchFailed": "Couldn't fetch trends.",
     "refetchTitle": "Today's trends",
     "benchmarkChannels": "Benchmark channels",
-    "channelsHelp": "Add creators you admire and we'll recommend their most-viewed videos over 3 minutes from the last 30 days. Up to 10 channels.",
+    "channelsHelp": "Add creators you admire and we'll recommend their most-viewed videos over 3 minutes from the last 30 days. Up to 20 channels.",
     "channelLabel": "@handle or channel URL",
     "channelsEmpty": "No channels yet.",
     "channelErrors": {
       "invalid": "Check the format, e.g. @handle or a channel URL.",
-      "limit": "You can add up to 10 channels.",
+      "limit": "You can add up to 20 channels.",
       "notFound": "We couldn't find that channel.",
       "duplicate": "That channel is already added.",
       "failed": "Couldn't add the channel. Please try again."

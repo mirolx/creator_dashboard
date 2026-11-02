@@ -32,7 +32,7 @@
 
 ### 탐색 · 영감
 - **오늘의 트렌드 추천** (YouTube) — 매일 오전 6시(한국 시간)에 자동으로 새로 가져온다
-  - 📺 **벤치마킹 채널** — 등록한 채널의 최근 30일 인기 영상 (채널당 최대 2개, 최근 추천한 영상은 뒤로)
+  - 📺 **벤치마킹 채널** — 등록한 채널의 최근 30일 인기 영상 (채널당 최대 2개, 이미 추천한 영상은 오래된 순으로 돌아가며)
   - 🔍 **키워드 추천** — 그룹별 키워드 풀(최대 100개)을 매일 로테이션해 OR 검색
   - 제목·태그·설명에 겹치는 키워드 수로 **관련도 순위**를 매기고, 맞은 키워드를 태그로 표시
   - 겹치는 키워드(alone ⊂ living alone)는 한 번만 세고, 한 화면에 여러 주제를 섞고, 최근 7일 안에 추천한 영상은 다시 추천하지 않음 ("다시 가져오기"를 누를 때마다 새 영상)
@@ -146,7 +146,7 @@
 3. **APIs & Services → Credentials → Create credentials → API key**로 키를 만든다.
 4. 키 제한(API restrictions)을 "YouTube Data API v3"로 걸어 둔다.
 
-하루 무료 할당량은 10,000 units. 트렌드를 한 번 가져올 때 약 430 units를 쓴다 (가장 오래 쓰지 않은 키워드 그룹 4개 × 검색 100 units + 벤치마킹 채널 최대 10개 + 영상 상세 조회). "오늘 트렌드 다시 가져오기"도 한 번에 같은 양을 쓴다. 결제 정보는 필요 없다.
+하루 무료 할당량은 10,000 units. 트렌드를 한 번 가져올 때 약 430 units를 쓴다 (가장 오래 쓰지 않은 키워드 그룹 4개 × 검색 100 units + 벤치마킹 채널 최대 20개 + 영상 상세 조회). "오늘 트렌드 다시 가져오기"도 한 번에 같은 양을 쓴다. 결제 정보는 필요 없다.
 
 ### 3. 로컬 실행
 
@@ -245,7 +245,7 @@ Screenshots are at the [top of this page](#크리에이터-대시보드).
 
 ### Explore & inspiration
 - **Today's trending topics** (YouTube) — refreshed automatically every day at 6 AM KST
-  - 📺 **Benchmark channels** — the most-viewed videos from your chosen channels in the last 30 days (max 2 per channel; recently shown ones go last)
+  - 📺 **Benchmark channels** — the most-viewed videos from your chosen channels in the last 30 days (max 2 per channel; already shown ones rotate, oldest first)
   - 🔍 **Keyword picks** — a grouped keyword pool (up to 100) rotated daily into OR searches
   - Ranked by **relevance** (how many of your keywords appear in the title, tags, and description), with the matched keywords shown as tags
   - Overlapping keywords (alone ⊂ living alone) count once, topics are mixed on each screen, and videos picked in the last 7 days are skipped (every "fetch again" brings new videos)
@@ -358,7 +358,7 @@ Rebuilt from the [Fluid Magnetic Cursor on 21st.dev](https://21st.dev/@jahed/com
 3. Create a key under **APIs & Services → Credentials → Create credentials → API key**.
 4. Restrict the key to "YouTube Data API v3".
 
-The free quota is 10,000 units per day. One trend fetch uses about 430 units (4 least-recently searched keyword groups × one 100-unit search + up to 10 benchmark channels + video details). "Fetch today's trends again" costs the same. No billing is required.
+The free quota is 10,000 units per day. One trend fetch uses about 430 units (4 least-recently searched keyword groups × one 100-unit search + up to 20 benchmark channels + video details). "Fetch today's trends again" costs the same. No billing is required.
 
 ### 3. Run locally
 

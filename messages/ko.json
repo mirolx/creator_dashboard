@@ -163,12 +163,12 @@
     "refetchFailed": "트렌드를 가져오지 못했어요.",
     "refetchTitle": "오늘 트렌드",
     "benchmarkChannels": "벤치마킹 채널",
-    "channelsHelp": "좋아하는 크리에이터 채널을 등록하면 최근 30일 동안 올라온 3분 넘는 영상 중 조회수가 높은 영상을 추천해요. 최대 10개까지 등록할 수 있어요.",
+    "channelsHelp": "좋아하는 크리에이터 채널을 등록하면 최근 30일 동안 올라온 3분 넘는 영상 중 조회수가 높은 영상을 추천해요. 최대 20개까지 등록할 수 있어요.",
     "channelLabel": "@핸들 또는 채널 URL",
     "channelsEmpty": "등록된 채널이 없어요.",
     "channelErrors": {
       "invalid": "입력 형식을 확인해 주세요. 예: @handle 또는 채널 URL",
-      "limit": "최대 10개까지 등록할 수 있어요.",
+      "limit": "최대 20개까지 등록할 수 있어요.",
       "notFound": "채널을 찾지 못했어요.",
       "duplicate": "이미 등록된 채널이에요.",
       "failed": "채널을 추가하지 못했어요. 잠시 후 다시 시도해 주세요."
