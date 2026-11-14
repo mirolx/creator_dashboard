@@ -69,25 +69,6 @@
     "itemLabel": "Checklist item",
     "empty": "Your checklist is empty."
   },
-  "kanban": {
-    "title": "Editing progress",
-    "cardLabel": "Video title",
-    "emptyColumn": "None",
-    "notionOpen": "Open Notion page",
-    "notionLink": "Link a Notion page",
-    "notionEdit": "Edit Notion link",
-    "notionPlaceholder": "https://www.notion.so/…",
-    "notionInvalid": "Enter a Notion page URL (notion.so / notion.site). Save it empty to unlink.",
-    "notionSave": "Save",
-    "notionCancel": "Cancel",
-    "statuses": {
-      "idea": "Idea",
-      "shoot": "Shoot",
-      "edit": "Edit",
-      "scheduled": "Scheduled",
-      "published": "Published"
-    }
-  },
   "trends": {
     "title": "Today's trending topics",
     "loading": "Loading trends…",
@@ -155,6 +136,34 @@
     }
   },
   "pipeline": {
+    "title": "Content pipeline",
+    "cardLabel": "Video title",
+    "emptyColumn": "None",
+    "dropHere": "Drop here",
+    "stage": "Stage",
+    "expand": "Details",
+    "collapse": "Collapse",
+    "due": "{label} D-{days}",
+    "dueToday": "{label} D-day",
+    "dates": {
+      "shoot_on": "Shoot",
+      "edit_due_on": "Edit due",
+      "upload_on": "Upload"
+    },
+    "archive": "Archive",
+    "unarchive": "Restore",
+    "deleteConfirm": "Delete this card? This can't be undone.",
+    "archiveTitle": "Archive",
+    "archiveEmpty": "No archived cards yet.",
+    "noUploadDate": "No upload date",
+    "notionSyncFailed": "Couldn't update Notion · Retry",
+    "statuses": {
+      "idea": "Idea",
+      "shoot": "Shoot",
+      "edit": "Edit",
+      "scheduled": "Scheduled",
+      "published": "Published"
+    },
     "notion": {
       "open": "Notion",
       "creating": "Creating…",

@@ -69,25 +69,6 @@
     "itemLabel": "체크리스트 항목",
     "empty": "체크리스트가 비어 있어요."
   },
-  "kanban": {
-    "title": "편집 진행 상태",
-    "cardLabel": "영상 제목",
-    "emptyColumn": "없음",
-    "notionOpen": "Notion 페이지 열기",
-    "notionLink": "Notion 페이지 연결",
-    "notionEdit": "Notion 링크 수정",
-    "notionPlaceholder": "https://www.notion.so/…",
-    "notionInvalid": "Notion 페이지 주소(notion.so / notion.site)를 넣어 주세요. 비워 두고 저장하면 연결이 해제돼요.",
-    "notionSave": "저장",
-    "notionCancel": "취소",
-    "statuses": {
-      "idea": "아이디어",
-      "shoot": "촬영",
-      "edit": "편집",
-      "scheduled": "예약 업로드",
-      "published": "게시 완료"
-    }
-  },
   "trends": {
     "title": "오늘의 트렌드 추천",
     "loading": "트렌드를 불러오는 중…",
@@ -155,6 +136,34 @@
     }
   },
   "pipeline": {
+    "title": "콘텐츠 파이프라인",
+    "cardLabel": "영상 제목",
+    "emptyColumn": "없음",
+    "dropHere": "여기에 놓기",
+    "stage": "단계",
+    "expand": "자세히",
+    "collapse": "접기",
+    "due": "{label} D-{days}",
+    "dueToday": "{label} D-day",
+    "dates": {
+      "shoot_on": "촬영",
+      "edit_due_on": "편집 마감",
+      "upload_on": "업로드"
+    },
+    "archive": "보관함으로",
+    "unarchive": "되돌리기",
+    "deleteConfirm": "이 카드를 삭제할까요? 되돌릴 수 없어요.",
+    "archiveTitle": "보관함",
+    "archiveEmpty": "보관한 카드가 없어요.",
+    "noUploadDate": "업로드일 없음",
+    "notionSyncFailed": "노션 반영 실패 · 다시 시도",
+    "statuses": {
+      "idea": "아이디어",
+      "shoot": "촬영",
+      "edit": "편집",
+      "scheduled": "예약 업로드",
+      "published": "게시 완료"
+    },
     "notion": {
       "open": "Notion",
       "creating": "만드는 중…",

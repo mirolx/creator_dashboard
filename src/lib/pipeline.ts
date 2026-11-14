@@ -43,3 +43,25 @@ export function nextDue(
   }
   return best
 }
+
+/**
+ * 카드를 `status` 칸의 `beforeId` 카드 앞(null이면 칸 끝)에 놓을 때의 단계와 position.
+ * 자리 계산에서 끌고 있는 카드 자신은 뺀다. 순서가 그대로면 null.
+ */
+export function dropPlacement(
+  cards: KanbanCard[],
+  cardId: string,
+  status: KanbanStatus,
+  beforeId: string | null,
+): { status: KanbanStatus; position: number } | null {
+  const dragged = cards.find((c) => c.id === cardId)
+  if (!dragged || beforeId === cardId) return null
+  const column = cards
+    .filter((c) => isActive(c) && c.status === status)
+    .sort((a, b) => a.position - b.position)
+  const others = column.filter((c) => c.id !== cardId)
+  const target = beforeId === null ? -1 : others.findIndex((c) => c.id === beforeId)
+  const index = target === -1 ? others.length : target
+  if (dragged.status === status && column.indexOf(dragged) === index) return null
+  return { status, position: positionAt(others.map((c) => c.position), index) }
+}

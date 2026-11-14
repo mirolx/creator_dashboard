@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { NOTION_STATUS, isActive, nextDue, positionAt } from './pipeline'
+import { NOTION_STATUS, dropPlacement, isActive, nextDue, positionAt } from './pipeline'
 import type { KanbanCard } from './types'
 
 function card(over: Partial<KanbanCard> = {}): KanbanCard {
@@ -41,5 +41,36 @@ describe('pipeline', () => {
   it('isActive is false once archived', () => {
     expect(isActive(card({ archived_at: '2026-11-15T00:00:00Z' }))).toBe(false)
     expect(isActive(card())).toBe(true)
+  })
+})
+
+describe('dropPlacement', () => {
+  const cols = [
+    card({ id: 'a', status: 'idea', position: 1 }),
+    card({ id: 'b', status: 'idea', position: 2 }),
+    card({ id: 'c', status: 'idea', position: 3 }),
+    card({ id: 'x', status: 'edit', position: 5 }),
+  ]
+  it('appends to the end of a column when dropped on empty space', () => {
+    expect(dropPlacement(cols, 'a', 'edit', null)).toEqual({ status: 'edit', position: 6 })
+    expect(dropPlacement(cols, 'a', 'published', null)).toEqual({ status: 'published', position: 1 })
+  })
+  it('inserts before the target card', () => {
+    expect(dropPlacement(cols, 'a', 'edit', 'x')).toEqual({ status: 'edit', position: 4 })
+    expect(dropPlacement(cols, 'c', 'idea', 'b')).toEqual({ status: 'idea', position: 1.5 })
+  })
+  it('ignores the dragged card when computing the slot', () => {
+    expect(dropPlacement(cols, 'a', 'idea', 'c')).toEqual({ status: 'idea', position: 2.5 })
+    expect(dropPlacement(cols, 'a', 'idea', null)).toEqual({ status: 'idea', position: 4 })
+  })
+  it('returns null when nothing would move', () => {
+    expect(dropPlacement(cols, 'a', 'idea', 'a')).toBeNull()
+    expect(dropPlacement(cols, 'a', 'idea', 'b')).toBeNull()
+    expect(dropPlacement(cols, 'c', 'idea', null)).toBeNull()
+    expect(dropPlacement(cols, 'missing', 'idea', null)).toBeNull()
+  })
+  it('skips archived cards', () => {
+    const withArchived = [...cols, card({ id: 'z', status: 'edit', position: 50, archived_at: 'x' })]
+    expect(dropPlacement(withArchived, 'a', 'edit', null)).toEqual({ status: 'edit', position: 6 })
   })
 })
