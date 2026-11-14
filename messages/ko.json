@@ -173,5 +173,22 @@
       "unauthorized": "노션 통합이 '콘텐츠' DB에 연결돼 있는지 확인해 주세요",
       "notFound": "노션 DB나 페이지를 찾을 수 없어요"
     }
+  },
+  "calendar": {
+    "title": "캘린더",
+    "prev": "이전 달",
+    "next": "다음 달",
+    "today": "오늘",
+    "add": "일정 추가",
+    "undated": "날짜 없는 카드",
+    "kinds": {
+      "shoot": "촬영",
+      "edit": "편집 마감",
+      "upload": "업로드",
+      "event": "일정"
+    },
+    "openPipeline": "파이프라인에서 보기",
+    "hint": "블록을 끌어서 옮기거나, 눌러서 고른 뒤 날짜를 누르세요.",
+    "close": "닫기"
   }
 }

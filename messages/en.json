@@ -173,5 +173,22 @@
       "unauthorized": "Check that the Notion integration is connected to the 'Content' database",
       "notFound": "Couldn't find the Notion database or page"
     }
+  },
+  "calendar": {
+    "title": "Calendar",
+    "prev": "Previous month",
+    "next": "Next month",
+    "today": "Today",
+    "add": "Add event",
+    "undated": "Cards without dates",
+    "kinds": {
+      "shoot": "Shoot",
+      "edit": "Edit due",
+      "upload": "Upload",
+      "event": "Event"
+    },
+    "openPipeline": "View in pipeline",
+    "hint": "Drag a block to move it, or tap it and then tap a day.",
+    "close": "Close"
   }
 }
