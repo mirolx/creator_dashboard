@@ -2,10 +2,8 @@ import { requireUser } from '@/lib/auth/requireUser'
 import { createClient } from '@/lib/supabase/server'
 import type {
   ChecklistItem,
-  Hashtag,
   KanbanCard,
   PinnedIdea,
-  ReferenceItem,
   ScheduleItem,
   WorkspaceTable,
 } from '@/lib/types'
@@ -15,8 +13,6 @@ export type DashboardData = {
   checklist: ChecklistItem[]
   kanban: KanbanCard[]
   ideas: PinnedIdea[]
-  references: ReferenceItem[]
-  hashtags: Hashtag[]
 }
 
 export async function loadDashboard(workspaceId: string): Promise<DashboardData> {
@@ -29,13 +25,11 @@ export async function loadDashboard(workspaceId: string): Promise<DashboardData>
     return (data ?? []) as T[]
   }
 
-  const [schedule, checklist, kanban, ideas, references, hashtags] = await Promise.all([
+  const [schedule, checklist, kanban, ideas] = await Promise.all([
     list<ScheduleItem>('schedule_items'),
     list<ChecklistItem>('checklist_items'),
     list<KanbanCard>('kanban_cards'),
     list<PinnedIdea>('pinned_ideas'),
-    list<ReferenceItem>('reference_items'),
-    list<Hashtag>('hashtags'),
   ])
-  return { schedule, checklist, kanban, ideas, references, hashtags }
+  return { schedule, checklist, kanban, ideas }
 }

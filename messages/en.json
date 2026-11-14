@@ -103,32 +103,6 @@
     "empty": "No pinned ideas yet.",
     "source": "View source"
   },
-  "references": {
-    "title": "Recent references",
-    "kindLabel": "Type",
-    "titleLabel": "Title",
-    "urlLabel": "Link (optional)",
-    "imageUrlLabel": "Image URL (optional)",
-    "noteLabel": "Note (optional)",
-    "empty": "No saved references.",
-    "open": "Open",
-    "invalidUrl": "Links must start with http:// or https://.",
-    "kinds": {
-      "thumbnail": "Thumbnail",
-      "topic": "Topic",
-      "sound": "Sound effect",
-      "font": "Font",
-      "other": "Other"
-    }
-  },
-  "hashtags": {
-    "title": "Hashtag bank",
-    "tagLabel": "Hashtag",
-    "groupLabel": "Group (optional)",
-    "empty": "No saved hashtags.",
-    "ungrouped": "Ungrouped",
-    "duplicate": "That hashtag already exists."
-  },
   "memo": {
     "title": "Quick notes",
     "label": "Quick notes",

@@ -3,11 +3,9 @@ import { notFound } from 'next/navigation'
 import { getTranslations } from 'next-intl/server'
 import { Card } from '@/components/ui/card'
 import { ChecklistWidget } from '@/features/checklist/ChecklistWidget'
-import { HashtagsWidget } from '@/features/hashtags/HashtagsWidget'
 import { KanbanWidget } from '@/features/kanban/KanbanWidget'
 import { MemoWidget } from '@/features/memo/MemoWidget'
 import { PinnedIdeasWidget } from '@/features/ideas/PinnedIdeasWidget'
-import { ReferencesWidget } from '@/features/references/ReferencesWidget'
 import { ScheduleWidget } from '@/features/schedule/ScheduleWidget'
 import { TrendsSection } from '@/features/trends/TrendsSection'
 import { loadDashboard } from '@/lib/dashboard'
@@ -66,16 +64,10 @@ export default async function DashboardPage({
         <div className={isYouTube ? 'md:col-span-4' : 'md:col-span-6'}>
           <PinnedIdeasWidget initial={data.ideas} />
         </div>
-        <div className="md:col-span-6">
-          <ReferencesWidget initial={data.references} />
-        </div>
-        <div className={isYouTube ? 'md:col-span-6' : 'md:col-span-4'}>
-          <HashtagsWidget initial={data.hashtags} />
-        </div>
-        <div className={isYouTube ? 'md:col-span-8' : 'md:col-span-4'}>
+        <div className={isYouTube ? 'md:col-span-8' : 'md:col-span-6'}>
           <MemoWidget initialMemo={workspace.memo} />
         </div>
-        <div className="md:col-span-4">
+        <div className={isYouTube ? 'md:col-span-4' : 'md:col-span-12'}>
           <Card title={t('performance.title')} tone="accent">
             <p className="text-sm font-medium opacity-75">{t('performance.comingSoon')}</p>
           </Card>

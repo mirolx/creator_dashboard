@@ -103,32 +103,6 @@
     "empty": "고정된 아이디어가 없어요.",
     "source": "원본 보기"
   },
-  "references": {
-    "title": "최근 저장한 레퍼런스",
-    "kindLabel": "종류",
-    "titleLabel": "제목",
-    "urlLabel": "링크 (선택)",
-    "imageUrlLabel": "이미지 URL (선택)",
-    "noteLabel": "메모 (선택)",
-    "empty": "저장한 레퍼런스가 없어요.",
-    "open": "열기",
-    "invalidUrl": "링크는 http:// 또는 https://로 시작하는 주소여야 해요.",
-    "kinds": {
-      "thumbnail": "썸네일",
-      "topic": "주제",
-      "sound": "효과음",
-      "font": "폰트",
-      "other": "기타"
-    }
-  },
-  "hashtags": {
-    "title": "해시태그 뱅크",
-    "tagLabel": "해시태그",
-    "groupLabel": "그룹 (선택)",
-    "empty": "저장한 해시태그가 없어요.",
-    "ungrouped": "그룹 없음",
-    "duplicate": "이미 있는 해시태그예요."
-  },
   "memo": {
     "title": "빠른 메모",
     "label": "빠른 메모",

@@ -11,17 +11,12 @@ export type ScheduleKind = (typeof SCHEDULE_KINDS)[number]
 export const KANBAN_STATUSES = ['shot', 'editing', 'review', 'uploaded'] as const
 export type KanbanStatus = (typeof KANBAN_STATUSES)[number]
 
-export const REFERENCE_KINDS = ['thumbnail', 'topic', 'sound', 'font', 'other'] as const
-export type ReferenceKind = (typeof REFERENCE_KINDS)[number]
-
 /** workspace_id 컬럼이 있고 Realtime으로 구독하는 테이블 */
 export const WORKSPACE_TABLES = [
   'schedule_items',
   'checklist_items',
   'kanban_cards',
   'pinned_ideas',
-  'reference_items',
-  'hashtags',
   'trend_keywords',
   'benchmark_channels',
 ] as const
@@ -93,19 +88,6 @@ export type PinnedIdea = WorkspaceRow & {
   note: string
   source_url: string | null
   thumbnail_url: string | null
-}
-
-export type ReferenceItem = WorkspaceRow & {
-  kind: ReferenceKind
-  title: string
-  url: string | null
-  image_url: string | null
-  note: string
-}
-
-export type Hashtag = WorkspaceRow & {
-  tag: string
-  group_name: string | null
 }
 
 export type ActionResult = { ok: true } | { error: string }

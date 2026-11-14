@@ -20,8 +20,3 @@ export const notionUrlSchema = z
   .trim()
   .pipe(z.union([z.literal(''), notionUrl]))
   .transform((v) => (v === '' ? null : v))
-
-/** "#day in my life" → "dayinmylife" */
-export function normalizeTag(input: string): string {
-  return input.trim().replace(/^#+/, '').replace(/\s+/g, '')
-}

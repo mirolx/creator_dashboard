@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { normalizeTag, notionUrlSchema, optionalUrlSchema, textSchema } from './validation'
+import { notionUrlSchema, optionalUrlSchema, textSchema } from './validation'
 
 describe('textSchema', () => {
   it('trims and requires at least one character', () => {
@@ -21,18 +21,6 @@ describe('optionalUrlSchema', () => {
   it('rejects other schemes and non-URLs', () => {
     expect(optionalUrlSchema.safeParse('javascript:alert(1)').success).toBe(false)
     expect(optionalUrlSchema.safeParse('not a url').success).toBe(false)
-  })
-})
-
-describe('normalizeTag', () => {
-  it('strips leading # and whitespace', () => {
-    expect(normalizeTag('  #storytime ')).toBe('storytime')
-    expect(normalizeTag('##grwm')).toBe('grwm')
-    expect(normalizeTag('day in my life')).toBe('dayinmylife')
-  })
-
-  it('returns an empty string for blank input', () => {
-    expect(normalizeTag(' # ')).toBe('')
   })
 })
 
