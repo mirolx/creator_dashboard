@@ -76,10 +76,11 @@
     "notionSave": "저장",
     "notionCancel": "취소",
     "statuses": {
-      "shot": "촬영완료",
-      "editing": "편집중",
-      "review": "검수중",
-      "uploaded": "업로드완료"
+      "idea": "아이디어",
+      "shoot": "촬영",
+      "edit": "편집",
+      "scheduled": "예약 업로드",
+      "published": "게시 완료"
     }
   },
   "trends": {

@@ -37,9 +37,14 @@ export function KanbanWidget({ initial }: { initial: KanbanCard[] }) {
       id: newId(),
       workspace_id: workspaceId,
       title: parsed.data,
-      status: 'shot',
-      position: endOf('shot'),
+      status: 'idea',
+      position: endOf('idea'),
       notion_url: null,
+      notion_page_id: null,
+      shoot_on: null,
+      edit_due_on: null,
+      upload_on: null,
+      archived_at: null,
       created_at: new Date().toISOString(),
     }
     setTitle('')

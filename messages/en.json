@@ -76,10 +76,11 @@
     "notionSave": "Save",
     "notionCancel": "Cancel",
     "statuses": {
-      "shot": "Shot",
-      "editing": "Editing",
-      "review": "In review",
-      "uploaded": "Uploaded"
+      "idea": "Idea",
+      "shoot": "Shoot",
+      "edit": "Edit",
+      "scheduled": "Scheduled",
+      "published": "Published"
     }
   },
   "trends": {

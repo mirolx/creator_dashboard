@@ -8,8 +8,11 @@ export function isPlatform(value: string): value is Platform {
 export const SCHEDULE_KINDS = ['shoot', 'edit', 'upload'] as const
 export type ScheduleKind = (typeof SCHEDULE_KINDS)[number]
 
-export const KANBAN_STATUSES = ['shot', 'editing', 'review', 'uploaded'] as const
+export const KANBAN_STATUSES = ['idea', 'shoot', 'edit', 'scheduled', 'published'] as const
 export type KanbanStatus = (typeof KANBAN_STATUSES)[number]
+
+export const CARD_DATE_FIELDS = ['shoot_on', 'edit_due_on', 'upload_on'] as const
+export type CardDateField = (typeof CARD_DATE_FIELDS)[number]
 
 /** workspace_id 컬럼이 있고 Realtime으로 구독하는 테이블 */
 export const WORKSPACE_TABLES = [
@@ -53,6 +56,14 @@ export type KanbanCard = WorkspaceRow & {
   position: number
   /** 연결된 Notion 페이지 (없으면 null) */
   notion_url: string | null
+  /** 동기화된 Notion 페이지 ID (없으면 null) */
+  notion_page_id: string | null
+  /** 촬영일 / 편집 마감일 / 업로드일 (YYYY-MM-DD) */
+  shoot_on: string | null
+  edit_due_on: string | null
+  upload_on: string | null
+  /** 보관 처리된 시각 (보관 전이면 null) */
+  archived_at: string | null
 }
 
 export type TrendKeyword = WorkspaceRow & {
