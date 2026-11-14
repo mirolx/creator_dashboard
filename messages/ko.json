@@ -189,6 +189,9 @@
     },
     "openPipeline": "파이프라인에서 보기",
     "hint": "블록을 끌어서 옮기거나, 눌러서 고른 뒤 날짜를 누르세요.",
-    "close": "닫기"
+    "close": "닫기",
+    "eventDone": "완료",
+    "deleteEvent": "삭제",
+    "deleteConfirm": "이 일정을 삭제할까요?"
   }
 }

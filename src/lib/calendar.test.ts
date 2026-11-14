@@ -44,6 +44,11 @@ describe('monthGrid', () => {
     expect(monthGrid(2026, 2)).toHaveLength(35) // 1/26 ~ 3/1
     expect(monthGrid(2026, 2).at(-1)).toBe('2026-03-01')
   })
+  it('pads a four-week February to five weeks', () => {
+    expect(monthGrid(2027, 2)).toHaveLength(35)
+    expect(monthGrid(2027, 2)[0]).toBe('2027-02-01')
+    expect(monthGrid(2027, 2).at(-1)).toBe('2027-03-07')
+  })
   it('starts on the 1st when the 1st is a Monday', () => {
     expect(monthGrid(2026, 6)[0]).toBe('2026-06-01')
   })
@@ -74,6 +79,13 @@ describe('toCalendarBlocks', () => {
     expect(block.date).toBe('2026-11-16')
     expect(block.kind).toBe('event')
     expect(block.source).toEqual({ type: 'schedule', id: 's1' })
+  })
+  it('marks done schedule items and never marks card blocks done', () => {
+    const blocks = toCalendarBlocks(
+      [card({ upload_on: '2026-11-10' })],
+      [item({ is_done: true }), item({ id: 's2', is_done: false })],
+    )
+    expect(blocks.map((b) => b.done)).toEqual([false, true, false])
   })
 })
 

@@ -9,6 +9,8 @@ export type CalendarBlock = {
   kind: CalendarKind
   title: string
   archived: boolean
+  /** 완료한 기타 일정 (카드 블록은 항상 false) */
+  done: boolean
   source: { type: 'card'; id: string; field: CardDateField } | { type: 'schedule'; id: string }
 }
 
@@ -31,7 +33,8 @@ export function monthGrid(year: number, month: number): string[] {
   const lead = (new Date(first).getUTCDay() + 6) % 7 // 월요일 = 0
   const trail = (7 - new Date(last).getUTCDay()) % 7 // 일요일이면 0
   const start = first - lead * DAY_MS
-  const count = Math.round((last - first) / DAY_MS) + 1 + lead + trail
+  // 4주로 딱 떨어지는 2월도 최소 5주(35칸)로 채운다.
+  const count = Math.max(35, Math.round((last - first) / DAY_MS) + 1 + lead + trail)
   return Array.from({ length: count }, (_, i) => isoDate(start + i * DAY_MS))
 }
 
@@ -47,6 +50,7 @@ export function toCalendarBlocks(cards: KanbanCard[], items: ScheduleItem[]): Ca
         kind: FIELD_KIND[field],
         title: card.title,
         archived: card.archived_at !== null,
+        done: false,
         source: { type: 'card', id: card.id, field },
       })
     }
@@ -58,6 +62,7 @@ export function toCalendarBlocks(cards: KanbanCard[], items: ScheduleItem[]): Ca
       kind: 'event',
       title: item.title,
       archived: false,
+      done: item.is_done,
       source: { type: 'schedule', id: item.id },
     })
   }

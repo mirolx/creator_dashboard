@@ -113,7 +113,7 @@ export function DayCell({
               title={`${t(`kinds.${block.kind}`)} · ${block.title}`}
               className={`block w-full cursor-grab truncate rounded-md px-1.5 py-0.5 text-left text-[11px] font-semibold active:cursor-grabbing ${
                 KIND_CLASS[block.kind]
-              } ${block.archived ? 'opacity-50' : ''} ${
+              } ${block.archived ? 'opacity-50' : ''} ${block.done ? 'line-through opacity-50' : ''} ${
                 selectedKey === block.key ? 'outline-2 outline-offset-1 outline-cream' : ''
               }`}
             >

@@ -24,6 +24,7 @@ import { useNotionSync } from '@/features/pipeline/useNotionSync'
 import { scheduleData } from '@/features/schedule/data'
 import { CardDatePopover, FloatingPanel } from './CardDatePopover'
 import { DayCell, DRAG_TYPE, KIND_CLASS } from './DayCell'
+import { EventPopover } from './EventPopover'
 
 const byDate = (a: ScheduleItem, b: ScheduleItem) =>
   new Date(a.scheduled_at).getTime() - new Date(b.scheduled_at).getTime()
@@ -61,7 +62,7 @@ export function CalendarView({
   const today = seoulDateString(new Date())
   const [view, setView] = useState<Month>(() => monthOf(today))
   const [selected, setSelected] = useState<string | null>(null)
-  const [popoverId, setPopoverId] = useState<string | null>(null)
+  const [popover, setPopover] = useState<CalendarBlock['source'] | null>(null)
   const [addingOn, setAddingOn] = useState<string | null>(null)
 
   const grid = useMemo(() => monthGrid(view.year, view.month), [view])
@@ -74,7 +75,10 @@ export function CalendarView({
   const undated = cards.rows.filter(
     (c) => isActive(c) && !c.shoot_on && !c.edit_due_on && !c.upload_on,
   )
-  const popoverCard = popoverId ? cards.rows.find((c) => c.id === popoverId) : undefined
+  const popoverCard =
+    popover?.type === 'card' ? cards.rows.find((c) => c.id === popover.id) : undefined
+  const popoverItem =
+    popover?.type === 'schedule' ? items.rows.find((i) => i.id === popover.id) : undefined
   const monthPrefix = `${view.year}-${String(view.month).padStart(2, '0')}`
 
   async function updateCard(card: KanbanCard, patch: Partial<KanbanCard>) {
@@ -113,11 +117,11 @@ export function CalendarView({
   function selectBlock(block: CalendarBlock) {
     if (selected === block.key) {
       setSelected(null)
-      setPopoverId(null)
+      setPopover(null)
       return
     }
     setSelected(block.key)
-    setPopoverId(block.source.type === 'card' ? block.source.id : null)
+    setPopover(block.source)
   }
 
   return (
@@ -214,7 +218,22 @@ export function CalendarView({
           card={popoverCard}
           platform={platform}
           onUpdate={(patch) => void updateCard(popoverCard, patch)}
-          onClose={() => setPopoverId(null)}
+          onClose={() => setPopover(null)}
+        />
+      )}
+
+      {popoverItem && (
+        <EventPopover
+          item={popoverItem}
+          onToggleDone={(done) => updateItem(popoverItem, { is_done: done })}
+          onDelete={() => {
+            setPopover(null)
+            setSelected(null)
+            void items.mutate({ type: 'DELETE', id: popoverItem.id }, () =>
+              scheduleData.remove(popoverItem.id),
+            )
+          }}
+          onClose={() => setPopover(null)}
         />
       )}
 

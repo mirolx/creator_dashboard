@@ -189,6 +189,9 @@
     },
     "openPipeline": "View in pipeline",
     "hint": "Drag a block to move it, or tap it and then tap a day.",
-    "close": "Close"
+    "close": "Close",
+    "eventDone": "Done",
+    "deleteEvent": "Delete",
+    "deleteConfirm": "Delete this event?"
   }
 }
