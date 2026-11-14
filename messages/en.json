@@ -38,6 +38,11 @@
     }
   },
   "nav": {
+    "home": "Home",
+    "calendar": "Calendar",
+    "pipeline": "Pipeline",
+    "explore": "Explore",
+    "archive": "Archive",
     "youtube": "YouTube",
     "instagram": "Instagram",
     "settings": "Settings",

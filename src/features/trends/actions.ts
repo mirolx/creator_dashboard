@@ -32,5 +32,6 @@ export async function refetchTodayTrends(workspaceId: string): Promise<ActionRes
 
   const result = await getTodayTrends(workspaceId, { exclude })
   revalidatePath('/youtube')
+  revalidatePath('/youtube/explore')
   return result.status === 'failed' ? { error: 'fetch-failed' } : { ok: true }
 }

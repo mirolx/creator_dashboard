@@ -38,6 +38,11 @@
     }
   },
   "nav": {
+    "home": "홈",
+    "calendar": "캘린더",
+    "pipeline": "파이프라인",
+    "explore": "탐색",
+    "archive": "보관함",
     "youtube": "YouTube",
     "instagram": "Instagram",
     "settings": "설정",

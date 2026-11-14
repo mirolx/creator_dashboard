@@ -3,6 +3,7 @@ import { getTranslations } from 'next-intl/server'
 import { PlatformScope } from '@/components/PlatformScope'
 import { Button } from '@/components/ui/button'
 import { signOut } from './actions'
+import { MenuTabs } from './MenuTabs'
 import { WorkspaceTabs } from './WorkspaceTabs'
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
@@ -11,13 +12,16 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   return (
     <PlatformScope>
       <div className="mx-auto max-w-7xl px-4 py-6 md:px-8">
-        <header className="mb-8 flex flex-wrap items-center justify-between gap-3">
-          <WorkspaceTabs />
-          <form action={signOut}>
-            <Button type="submit" variant="ghost" size="sm">
-              {t('logout')}
-            </Button>
-          </form>
+        <header className="mb-8 flex flex-col gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <WorkspaceTabs />
+            <form action={signOut}>
+              <Button type="submit" variant="ghost" size="sm">
+                {t('logout')}
+              </Button>
+            </form>
+          </div>
+          <MenuTabs />
         </header>
         {children}
       </div>
