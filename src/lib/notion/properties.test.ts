@@ -31,3 +31,13 @@ describe('notionPageIdFromUrl', () => {
     expect(notionPageIdFromUrl('not a url')).toBeNull()
   })
 })
+
+describe('notionUrlFromPageId', () => {
+  it('rebuilds a notion.so url without dashes, round-tripping with notionPageIdFromUrl', async () => {
+    const { notionUrlFromPageId } = await import('./properties')
+    const id = '01234567-89ab-cdef-0123-456789abcdef'
+    const url = notionUrlFromPageId(id)
+    expect(url).toBe('https://www.notion.so/0123456789abcdef0123456789abcdef')
+    expect(notionPageIdFromUrl(url)).toBe(id)
+  })
+})

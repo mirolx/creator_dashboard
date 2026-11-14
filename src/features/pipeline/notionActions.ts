@@ -3,7 +3,7 @@
 import { z } from 'zod'
 import { requireUser } from '@/lib/auth/requireUser'
 import { createNotionPage, NotionError, updateNotionPage, type NotionErrorCode } from '@/lib/notion/client'
-import { cardToNotionProperties, notionPageIdFromUrl } from '@/lib/notion/properties'
+import { cardToNotionProperties, notionPageIdFromUrl, notionUrlFromPageId } from '@/lib/notion/properties'
 import { createClient } from '@/lib/supabase/server'
 import type { ActionResult, KanbanCard } from '@/lib/types'
 
@@ -33,6 +33,13 @@ export async function openNotionPage(cardId: string): Promise<{ url: string } | 
   if (card.notion_page_id && card.notion_url) return { url: card.notion_url }
 
   const supabase = await createClient()
+
+  // 페이지 ID만 있고 링크가 지워진 카드: 새로 만들지 않고 ID로 링크를 복구한다.
+  if (card.notion_page_id) {
+    const url = notionUrlFromPageId(card.notion_page_id)
+    await supabase.from('kanban_cards').update({ notion_url: url }).eq('id', cardId) // best-effort
+    return { url }
+  }
 
   if (card.notion_url) {
     const pageId = notionPageIdFromUrl(card.notion_url)

@@ -29,3 +29,8 @@ export function notionPageIdFromUrl(url: string): string | null {
   const h = m[1].replace(/-/g, '').toLowerCase()
   return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`
 }
+
+/** 페이지 ID만 아는 카드의 Notion 주소를 다시 만든다. */
+export function notionUrlFromPageId(id: string): string {
+  return `https://www.notion.so/${id.replace(/-/g, '')}`
+}
