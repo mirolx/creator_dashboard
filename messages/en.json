@@ -49,15 +49,12 @@
     "logout": "Log out"
   },
   "dashboard": {
-    "today": "Today",
     "explore": "Explore & inspiration"
   },
   "schedule": {
-    "title": "Upload schedule",
     "titleLabel": "Title",
     "kindLabel": "Type",
     "whenLabel": "Date and time",
-    "empty": "Nothing scheduled.",
     "kinds": {
       "shoot": "Shoot",
       "edit": "Edit",
@@ -193,5 +190,12 @@
     "eventDone": "Done",
     "deleteEvent": "Delete",
     "deleteConfirm": "Delete this event?"
+  },
+  "home": {
+    "weekTitle": "This week",
+    "empty": "Nothing scheduled",
+    "openCalendar": "Open calendar",
+    "stagesTitle": "Progress",
+    "openPipeline": "Open pipeline"
   }
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { monthGrid, moveScheduledAt, seoulTimeAt, toCalendarBlocks } from './calendar'
+import { monthGrid, moveScheduledAt, seoulTimeAt, toCalendarBlocks, weekDates } from './calendar'
 import type { KanbanCard, ScheduleItem } from './types'
 
 function card(over: Partial<KanbanCard> = {}): KanbanCard {
@@ -99,5 +99,19 @@ describe('moveScheduledAt', () => {
 describe('seoulTimeAt', () => {
   it('returns the UTC ISO of a Seoul wall-clock time on a date', () => {
     expect(seoulTimeAt('2026-11-20', '10:00')).toBe('2026-11-20T01:00:00.000Z')
+  })
+})
+
+describe('weekDates', () => {
+  it('returns 7 consecutive dates starting today, across a month boundary', () => {
+    expect(weekDates('2026-11-30')).toEqual([
+      '2026-11-30',
+      '2026-12-01',
+      '2026-12-02',
+      '2026-12-03',
+      '2026-12-04',
+      '2026-12-05',
+      '2026-12-06',
+    ])
   })
 })

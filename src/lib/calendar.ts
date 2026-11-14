@@ -38,6 +38,12 @@ export function monthGrid(year: number, month: number): string[] {
   return Array.from({ length: count }, (_, i) => isoDate(start + i * DAY_MS))
 }
 
+/** today(YYYY-MM-DD)부터 7일 연속 날짜 */
+export function weekDates(today: string): string[] {
+  const start = Date.parse(`${today}T00:00:00Z`)
+  return Array.from({ length: 7 }, (_, i) => isoDate(start + i * DAY_MS))
+}
+
 export function toCalendarBlocks(cards: KanbanCard[], items: ScheduleItem[]): CalendarBlock[] {
   const blocks: CalendarBlock[] = []
   for (const card of cards) {
