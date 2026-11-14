@@ -148,5 +148,16 @@
       "duplicate": "That channel is already added.",
       "failed": "Couldn't add the channel. Please try again."
     }
+  },
+  "pipeline": {
+    "notion": {
+      "open": "Notion",
+      "creating": "Creating…",
+      "failed": "Couldn't connect to Notion",
+      "retry": "Retry",
+      "missingConfig": "The Notion token isn't set",
+      "unauthorized": "Check that the Notion integration is connected to the 'Content' database",
+      "notFound": "Couldn't find the Notion database or page"
+    }
   }
 }
