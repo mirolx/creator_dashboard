@@ -54,7 +54,11 @@ export function useNotionSync() {
   useEffect(() => {
     const map = timers.current
     return () => {
-      map.forEach(clearTimeout)
+      // 언마운트 시 대기 중인 반영은 버리지 않고 바로 보낸다 (서버 액션은 언마운트 후에도 호출 가능)
+      map.forEach((timer, id) => {
+        clearTimeout(timer)
+        void syncNotionPage(id).catch(() => {})
+      })
       map.clear()
     }
   }, [])

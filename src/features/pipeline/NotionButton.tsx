@@ -16,6 +16,7 @@ export function NotionButton({ card }: { card: KanbanCard }) {
   async function open() {
     // 팝업 차단을 피하려고 클릭 즉시 빈 탭을 연 뒤 주소를 채운다.
     const tab = window.open('', '_blank')
+    if (tab) tab.opener = null
     setPending(true)
     setErrorKey(null)
     try {

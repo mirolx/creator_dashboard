@@ -23,7 +23,7 @@ function touchesNotion(card: KanbanCard, patch: Partial<KanbanCard>) {
   return SYNCED_FIELDS.some((k) => k in patch && patch[k] !== card[k])
 }
 
-const DRAG_TYPE = 'text/plain'
+const DRAG_TYPE = 'application/x-creator-dashboard-card'
 const INTERACTIVE = 'input, select, textarea, button, a'
 
 export function PipelineBoard({ initial }: { initial: KanbanCard[] }) {

@@ -5,7 +5,7 @@ import { Plus } from 'lucide-react'
 import { useTranslations } from 'next-intl'
 import type { CalendarBlock, CalendarKind } from '@/lib/calendar'
 
-export const DRAG_TYPE = 'text/plain'
+export const DRAG_TYPE = 'application/x-creator-dashboard-block'
 
 export const KIND_CLASS: Record<CalendarKind, string> = {
   shoot: 'bg-cream text-ink',

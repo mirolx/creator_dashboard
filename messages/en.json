@@ -13,8 +13,6 @@
     "saved": "Saved",
     "moveUp": "Move up",
     "moveDown": "Move down",
-    "moveLeft": "Previous stage",
-    "moveRight": "Next stage",
     "loadFailed": "Couldn't load the dashboard.",
     "retry": "Try again"
   },
@@ -167,8 +165,8 @@
       "failed": "Couldn't connect to Notion",
       "retry": "Retry",
       "missingConfig": "The Notion token isn't set",
-      "unauthorized": "Check that the Notion integration is connected to the 'Content' database",
-      "notFound": "Couldn't find the Notion database or page"
+      "unauthorized": "The Notion token is invalid or lacks permission. Check NOTION_TOKEN",
+      "notFound": "Couldn't find the 'Content' database. Check that the integration is connected to it and that NOTION_DATA_SOURCE_ID is correct"
     }
   },
   "calendar": {

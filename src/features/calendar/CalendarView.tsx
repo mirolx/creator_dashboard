@@ -55,10 +55,11 @@ export function CalendarView({
 }) {
   const t = useTranslations('calendar')
   const tc = useTranslations('common')
+  const tp = useTranslations('pipeline')
   const format = useFormatter()
   const cards = useLiveList('kanban_cards', initialCards, byPosition)
   const items = useLiveList('schedule_items', initialItems, byDate)
-  const { schedule } = useNotionSync()
+  const { schedule, failed, retry } = useNotionSync()
   const today = seoulDateString(new Date())
   const [view, setView] = useState<Month>(() => monthOf(today))
   const [selected, setSelected] = useState<string | null>(null)
@@ -130,6 +131,17 @@ export function CalendarView({
         <p role="alert" className="mb-3 rounded-xl bg-danger/15 px-3 py-2 text-sm font-medium text-danger">
           {tc('saveFailed')}
         </p>
+      )}
+
+      {failed.size > 0 && (
+        <button
+          type="button"
+          role="alert"
+          onClick={() => failed.forEach((id) => retry(id))}
+          className="mb-3 block rounded-xl bg-danger/15 px-3 py-2 text-sm font-medium text-danger underline"
+        >
+          {tp('notionSyncFailed')}
+        </button>
       )}
 
       <div className="mb-3 flex flex-wrap items-center gap-2">

@@ -13,8 +13,6 @@
     "saved": "저장됨",
     "moveUp": "위로",
     "moveDown": "아래로",
-    "moveLeft": "이전 단계로",
-    "moveRight": "다음 단계로",
     "loadFailed": "대시보드를 불러오지 못했어요.",
     "retry": "다시 시도"
   },
@@ -167,8 +165,8 @@
       "failed": "노션 연결에 실패했어요",
       "retry": "다시 시도",
       "missingConfig": "노션 토큰이 설정되지 않았어요",
-      "unauthorized": "노션 통합이 '콘텐츠' DB에 연결돼 있는지 확인해 주세요",
-      "notFound": "노션 DB나 페이지를 찾을 수 없어요"
+      "unauthorized": "노션 토큰이 올바르지 않거나 권한이 없어요. NOTION_TOKEN을 확인해 주세요",
+      "notFound": "'콘텐츠' DB를 찾을 수 없어요. 통합이 DB에 연결됐는지와 NOTION_DATA_SOURCE_ID를 확인해 주세요"
     }
   },
   "calendar": {
