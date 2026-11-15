@@ -4,17 +4,6 @@
 
 **🔗 배포:** https://content-dashboard1.vercel.app · **🌐 [English](#english)**
 
-<table>
-  <tr>
-    <td width="50%"><img src="docs/images/dashboard-instagram.png" alt="Instagram 워크스페이스 — 더스티 라벤더 포인트"></td>
-    <td width="50%"><img src="docs/images/login.png" alt="로그인 화면"></td>
-  </tr>
-  <tr>
-    <td align="center">Instagram 워크스페이스 (더스티 라벤더)</td>
-    <td align="center">로그인</td>
-  </tr>
-</table>
-
 ## 주요 기능
 
 ### 워크스페이스
