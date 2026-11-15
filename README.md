@@ -4,10 +4,6 @@
 
 **🔗 배포:** https://content-dashboard1.vercel.app · **🌐 [English](#english)**
 
-<p align="center">
-  <img src="docs/images/dashboard-youtube.png" alt="YouTube 워크스페이스 대시보드 — 더스티 로즈 포인트" width="820">
-</p>
-
 <table>
   <tr>
     <td width="50%"><img src="docs/images/dashboard-instagram.png" alt="Instagram 워크스페이스 — 더스티 라벤더 포인트"></td>
