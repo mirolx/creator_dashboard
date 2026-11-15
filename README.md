@@ -142,6 +142,7 @@
    3. `supabase/migrations/0003_keyword_pool.sql`
    4. `supabase/migrations/0004_kanban_notion_links.sql`
    5. `supabase/migrations/0005_pipeline_calendar.sql` — 칸반을 5단계(아이디어·촬영·편집·예약 업로드·게시 완료)로 바꾸고 촬영일·편집 마감일·업로드일, Notion 페이지 ID, 보관 시각 컬럼을 추가한다. 기존 카드는 `shot→촬영`, `editing·review→편집`, `uploaded→게시 완료`로 옮겨진다.
+   6. `supabase/migrations/0006_notion_url_app_domain.sql` — Notion이 돌려주는 `app.notion.com` 주소도 카드 링크로 허용한다.
 
    이미 운영 중인 프로젝트를 업데이트할 때는 새 코드를 배포하기 **전에** 새 마이그레이션을 먼저 실행한다. 순서가 바뀌면 실시간 동기화와 트렌드 조회가 실패한다.
 3. `supabase/tests/rls_check.sql`을 실행해 결과가 `RLS OK`인지 확인한다.
@@ -379,6 +380,7 @@ Rebuilt from the [Fluid Magnetic Cursor on 21st.dev](https://21st.dev/@jahed/com
    3. `supabase/migrations/0003_keyword_pool.sql`
    4. `supabase/migrations/0004_kanban_notion_links.sql`
    5. `supabase/migrations/0005_pipeline_calendar.sql` — switches the kanban to five stages (Idea · Shoot · Edit · Scheduled · Published) and adds shoot / edit-due / upload dates, a Notion page ID, and an archive timestamp. Existing cards move `shot→Shoot`, `editing·review→Edit`, `uploaded→Published`.
+   6. `supabase/migrations/0006_notion_url_app_domain.sql` — also allows the `app.notion.com` page URLs Notion now returns.
 
    When updating an existing deployment, run new migrations **before** deploying the new code; otherwise realtime sync and trend fetching fail.
 3. Run `supabase/tests/rls_check.sql` and confirm it returns `RLS OK`.
