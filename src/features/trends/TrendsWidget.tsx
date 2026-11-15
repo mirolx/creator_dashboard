@@ -87,16 +87,22 @@ export function TrendsWidget({
           <p className="text-xs opacity-75">
             {topic.channel_title} · {t('views', { count: topic.view_count })}
           </p>
-          {topic.matched_keywords.length > 0 && (
-            <div className="mt-1 flex flex-wrap gap-1">
-              {topic.matched_keywords.slice(0, 3).map((keyword) => (
-                <Tag key={keyword} tone="accent">{keyword}</Tag>
-              ))}
-            </div>
-          )}
-          <Button size="sm" variant="ghost" disabled={isPinned} onClick={() => void pin(topic)} className="mt-2">
-            {isPinned ? t('pinned') : t('pin')}
-          </Button>
+          {/* 고정 버튼을 키워드 태그와 같은 줄에 둬서 카드 높이를 줄인다 */}
+          <div className="mt-1 flex flex-wrap items-center gap-1">
+            {topic.matched_keywords.slice(0, 3).map((keyword) => (
+              <Tag key={keyword} tone="accent">{keyword}</Tag>
+            ))}
+            <Button
+              size="sm"
+              variant="ghost"
+              magnetic={false}
+              disabled={isPinned}
+              onClick={() => void pin(topic)}
+              className="ml-auto"
+            >
+              {isPinned ? t('pinned') : t('pin')}
+            </Button>
+          </div>
         </div>
       </li>
     )
@@ -131,7 +137,7 @@ export function TrendsWidget({
           {groups.map((group) => (
             <section key={group.key}>
               <h4 className="mb-2 text-xs font-semibold uppercase tracking-widest opacity-75">{group.title}</h4>
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">{group.items.map(renderTopic)}</ul>
+              <ul className="grid grid-cols-1 gap-x-4 gap-y-3 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4">{group.items.map(renderTopic)}</ul>
             </section>
           ))}
         </div>

@@ -34,7 +34,7 @@ export default async function ExplorePage({
 
       <div className="grid grid-cols-1 gap-2 md:grid-cols-12">
         {isYouTube && (
-          <div className="md:col-span-8">
+          <div className="md:col-span-12">
             <Suspense
               fallback={
                 <Card title={t('trends.title')} tone="cream">
@@ -46,10 +46,11 @@ export default async function ExplorePage({
             </Suspense>
           </div>
         )}
-        <div className={isYouTube ? 'md:col-span-4' : 'md:col-span-6'}>
+        {/* 고정된 아이디어는 트렌드 아래에 전체 폭으로 둬서 여러 열로 펼친다 */}
+        <div className="md:col-span-12">
           <PinnedIdeasWidget initial={ideas} />
         </div>
-        <div className={isYouTube ? 'md:col-span-12' : 'md:col-span-6'}>
+        <div className="md:col-span-12">
           <MemoWidget initialMemo={workspace.memo} />
         </div>
       </div>
