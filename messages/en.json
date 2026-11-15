@@ -14,7 +14,8 @@
     "moveUp": "Move up",
     "moveDown": "Move down",
     "loadFailed": "Couldn't load the dashboard.",
-    "retry": "Try again"
+    "retry": "Try again",
+    "required": "Type something first"
   },
   "auth": {
     "title": "Creator Dashboard",

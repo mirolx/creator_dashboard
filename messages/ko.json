@@ -14,7 +14,8 @@
     "moveUp": "위로",
     "moveDown": "아래로",
     "loadFailed": "대시보드를 불러오지 못했어요.",
-    "retry": "다시 시도"
+    "retry": "다시 시도",
+    "required": "내용을 먼저 입력해 주세요"
   },
   "auth": {
     "title": "크리에이터 대시보드",

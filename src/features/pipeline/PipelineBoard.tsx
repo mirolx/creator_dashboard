@@ -4,6 +4,7 @@ import { useState, type DragEvent, type FormEvent } from 'react'
 import { useTranslations } from 'next-intl'
 import { Button } from '@/components/ui/button'
 import { fieldClass } from '@/components/ui/field'
+import { RequiredHint, useRequiredHint } from '@/components/ui/required-hint'
 import { seoulDateString } from '@/lib/dates'
 import { newId } from '@/lib/id'
 import { dropPlacement, isActive } from '@/lib/pipeline'
@@ -33,6 +34,7 @@ export function PipelineBoard({ initial }: { initial: KanbanCard[] }) {
   const { rows, mutate, error } = useLiveList('kanban_cards', initial, byPosition)
   const { schedule, failed, retry } = useNotionSync()
   const [title, setTitle] = useState('')
+  const required = useRequiredHint()
   const [dragOver, setDragOver] = useState<KanbanStatus | null>(null)
   const active = rows.filter(isActive)
   const today = seoulDateString(new Date())
@@ -40,10 +42,10 @@ export function PipelineBoard({ initial }: { initial: KanbanCard[] }) {
   const endOf = (status: KanbanStatus) =>
     positionAfter(active.filter((r) => r.status === status).map((r) => r.position))
 
-  function add(e: FormEvent) {
+  function add(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const parsed = textSchema.safeParse(title)
-    if (!parsed.success) return
+    if (!parsed.success) return required.reject(e)
     const row: KanbanCard = {
       id: newId(),
       workspace_id: workspaceId,
@@ -102,13 +104,18 @@ export function PipelineBoard({ initial }: { initial: KanbanCard[] }) {
           aria-label={t('cardLabel')}
           placeholder={t('cardLabel')}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          aria-invalid={required.missing || undefined}
+          onChange={(e) => {
+            setTitle(e.target.value)
+            required.clear()
+          }}
           className={`${fieldClass} flex-1`}
         />
         <Button type="submit" size="sm" variant="primary">
           {tc('add')}
         </Button>
       </form>
+      <RequiredHint show={required.missing} className="-mt-2 mb-3" />
 
       <div className="grid auto-cols-[minmax(15rem,1fr)] grid-flow-col gap-3 overflow-x-auto pb-2">
         {KANBAN_STATUSES.map((status) => {

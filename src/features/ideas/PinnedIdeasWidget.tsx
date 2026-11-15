@@ -6,6 +6,7 @@ import { EditableText } from '@/components/EditableText'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { fieldClass } from '@/components/ui/field'
+import { RequiredHint, useRequiredHint } from '@/components/ui/required-hint'
 import { newId } from '@/lib/id'
 import { useLiveList } from '@/lib/realtime/useLiveList'
 import { useWorkspaceId } from '@/lib/realtime/WorkspaceRealtime'
@@ -23,11 +24,12 @@ export function PinnedIdeasWidget({ initial }: { initial: PinnedIdea[] }) {
   const { rows, mutate, error } = useLiveList('pinned_ideas', initial, byNewest)
   const [title, setTitle] = useState('')
   const [note, setNote] = useState('')
+  const required = useRequiredHint()
 
-  function add(e: FormEvent) {
+  function add(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const parsed = textSchema.safeParse(title)
-    if (!parsed.success) return
+    if (!parsed.success) return required.reject(e)
     const row: PinnedIdea = {
       id: newId(),
       workspace_id: workspaceId,
@@ -55,9 +57,14 @@ export function PinnedIdeasWidget({ initial }: { initial: PinnedIdea[] }) {
           aria-label={t('titleLabel')}
           placeholder={t('titleLabel')}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          aria-invalid={required.missing || undefined}
+          onChange={(e) => {
+            setTitle(e.target.value)
+            required.clear()
+          }}
           className={fieldClass}
         />
+        <RequiredHint show={required.missing} />
         <div className="flex gap-2">
           <input
             aria-label={t('noteLabel')}

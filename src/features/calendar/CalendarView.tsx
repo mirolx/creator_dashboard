@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useFormatter, useTranslations } from 'next-intl'
 import { Button, IconButton } from '@/components/ui/button'
 import { fieldClass, selectClass } from '@/components/ui/field'
+import { RequiredHint, useRequiredHint } from '@/components/ui/required-hint'
 import { monthGrid, moveScheduledAt, seoulTimeAt, toCalendarBlocks, type CalendarBlock } from '@/lib/calendar'
 import { seoulDateString } from '@/lib/dates'
 import { newId } from '@/lib/id'
@@ -280,11 +281,13 @@ function EventForm({
   const [title, setTitle] = useState('')
   const [kind, setKind] = useState<ScheduleKind>('upload')
   const [time, setTime] = useState(DEFAULT_TIME)
+  const required = useRequiredHint()
 
-  function submit(e: FormEvent) {
+  function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const parsed = textSchema.safeParse(title)
-    if (!parsed.success || !time) return
+    if (!parsed.success) return required.reject(e)
+    if (!time) return
     onAdd({
       id: newId(),
       workspace_id: workspaceId,
@@ -303,10 +306,15 @@ function EventForm({
           aria-label={ts('titleLabel')}
           placeholder={ts('titleLabel')}
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          aria-invalid={required.missing || undefined}
+          onChange={(e) => {
+            setTitle(e.target.value)
+            required.clear()
+          }}
           autoFocus
           className={fieldClass}
         />
+        <RequiredHint show={required.missing} />
         <div className="flex gap-2">
           <select
             aria-label={ts('kindLabel')}

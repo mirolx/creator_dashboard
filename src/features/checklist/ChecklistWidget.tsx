@@ -7,6 +7,7 @@ import { EditableText } from '@/components/EditableText'
 import { Button, IconButton } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { fieldClass } from '@/components/ui/field'
+import { RequiredHint, useRequiredHint } from '@/components/ui/required-hint'
 import { newId } from '@/lib/id'
 import { positionAfter, positionBetween } from '@/lib/position'
 import { useLiveList } from '@/lib/realtime/useLiveList'
@@ -23,11 +24,12 @@ export function ChecklistWidget({ initial }: { initial: ChecklistItem[] }) {
   const workspaceId = useWorkspaceId()
   const { rows, mutate, error } = useLiveList('checklist_items', initial, byPosition)
   const [content, setContent] = useState('')
+  const required = useRequiredHint()
 
-  function add(e: FormEvent) {
+  function add(e: FormEvent<HTMLFormElement>) {
     e.preventDefault()
     const parsed = textSchema.safeParse(content)
-    if (!parsed.success) return
+    if (!parsed.success) return required.reject(e)
     const row: ChecklistItem = {
       id: newId(),
       workspace_id: workspaceId,
@@ -63,13 +65,18 @@ export function ChecklistWidget({ initial }: { initial: ChecklistItem[] }) {
           aria-label={t('itemLabel')}
           placeholder={t('itemLabel')}
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          aria-invalid={required.missing || undefined}
+          onChange={(e) => {
+            setContent(e.target.value)
+            required.clear()
+          }}
           className={`${fieldClass} flex-1`}
         />
         <Button type="submit" size="sm" variant="ink">
           {tc('add')}
         </Button>
       </form>
+      <RequiredHint show={required.missing} className="-mt-2 mb-3" />
 
       {rows.length === 0 ? (
         <p className="text-sm opacity-75">{t('empty')}</p>
