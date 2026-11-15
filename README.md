@@ -180,9 +180,23 @@ http://localhost:3000 → 회원가입 → YouTube 대시보드.
 1. [notion.so/my-integrations](https://www.notion.so/my-integrations)에서 **내부 통합**을 만든다. 콘텐츠 읽기 · 수정 · 추가 권한이 필요하다.
 2. Notion의 '콘텐츠' DB 오른쪽 위 **···** → **연결**에서 방금 만든 통합을 추가한다. 이걸 빼먹으면 권한 오류가 난다.
 3. Vercel(로컬에서 쓰려면 `.env.local`에도)에 `NOTION_TOKEN`(통합 토큰)과 `NOTION_DATA_SOURCE_ID`(`8818195e-fee9-4942-b7a4-a18d9b53adfe`)를 넣는다. `NOTION_TOKEN`은 Sensitive로 표시하고, 코드·README·채팅 등 다른 곳에는 붙여 넣지 않는다.
-4. Supabase **SQL Editor**에서 `supabase/migrations/0005_pipeline_calendar.sql`을 실행한다. 새 코드를 배포하기 **전에** 먼저 실행해야 한다.
+4. Supabase **SQL Editor**에서 `supabase/migrations/0005_pipeline_calendar.sql`과 `0006_notion_url_app_domain.sql`을 차례로 실행한다. 새 코드를 배포하기 **전에** 먼저 실행해야 한다.
 
 대시보드 → Notion 속성 매핑: 제목 → `제목`, 단계 → `상태`(아이디어 · 촬영 예정 · 편집 중 · 예약 업로드 · 게시 완료), 촬영일 → `촬영일`, 편집 마감일 → `편집 마감일`, 업로드일 → `업로드일`. YouTube와 Instagram 카드 모두 같은 DB에 만들어진다.
+
+**동작 방식**
+- 카드의 **+ Notion** 버튼을 처음 누르면 '콘텐츠' DB에 페이지를 만들고 새 탭으로 연다. 이후 버튼은 **Notion**으로 바뀌고 같은 페이지를 연다.
+- 연결된 카드의 제목·단계·날짜를 대시보드에서 바꾸면 약 1초 뒤 Notion 페이지에 반영된다(대시보드 → Notion 한 방향). Notion에서 바꾼 값은 대시보드로 돌아오지 않는다.
+- 반영에 실패하면 카드(캘린더에서는 화면 위)에 "노션 반영 실패 · 다시 시도"가 뜬다. 대시보드 저장은 그대로 유지된다.
+- 카드를 삭제하거나 보관해도 Notion 페이지는 지워지지 않는다.
+
+**문제 해결**
+| 버튼 옆 메시지 | 원인과 해결 |
+|---|---|
+| 노션 토큰이 설정되지 않았어요 | `NOTION_TOKEN` 또는 `NOTION_DATA_SOURCE_ID`가 비어 있다. 환경변수를 넣고 다시 배포(로컬은 dev 서버 재시작)한다. |
+| '콘텐츠' DB를 찾을 수 없어요 | 통합이 '콘텐츠' DB에 연결되지 않았거나 `NOTION_DATA_SOURCE_ID`가 틀렸다. 2번 단계를 확인한다. |
+| 노션 토큰이 올바르지 않거나 권한이 없어요 | 토큰이 틀렸거나 통합 권한(읽기·수정·추가)이 부족하다. |
+| 노션 연결에 실패했어요 | 그 밖의 오류. 0006 마이그레이션을 실행했는지 확인한다(안 하면 페이지는 만들어지지만 카드에 링크가 저장되지 않는다). |
 
 ### 폰에서 테스트하기 (로컬)
 
@@ -418,9 +432,23 @@ To use the Notion button on pipeline cards, do this before deploying.
 1. Create an **internal integration** at [notion.so/my-integrations](https://www.notion.so/my-integrations) with read, update, and insert content capabilities.
 2. In Notion, open the "콘텐츠" database's **···** menu → **Connections** and add that integration. Skipping this causes permission errors.
 3. Set `NOTION_TOKEN` (the integration token) and `NOTION_DATA_SOURCE_ID` (`8818195e-fee9-4942-b7a4-a18d9b53adfe`) in Vercel (and in `.env.local` for local use). Mark `NOTION_TOKEN` as Sensitive and never paste it anywhere else (code, README, chat).
-4. Run `supabase/migrations/0005_pipeline_calendar.sql` in the Supabase **SQL Editor** **before** deploying the new code.
+4. Run `supabase/migrations/0005_pipeline_calendar.sql` and then `0006_notion_url_app_domain.sql` in the Supabase **SQL Editor** **before** deploying the new code.
 
 Property mapping (dashboard → Notion): title → `제목`, stage → `상태` (아이디어 · 촬영 예정 · 편집 중 · 예약 업로드 · 게시 완료), shoot date → `촬영일`, edit-due date → `편집 마감일`, upload date → `업로드일`. YouTube and Instagram cards both go into the same database.
+
+**How it works**
+- The first click on a card's **+ Notion** button creates a page in the "콘텐츠" database and opens it in a new tab. After that the button reads **Notion** and opens the same page.
+- When a linked card's title, stage, or dates change in the dashboard, the Notion page is updated about a second later (one way: dashboard → Notion). Edits made in Notion do not come back.
+- If an update fails, the card (or the top of the calendar) shows "Couldn't update Notion · Retry". The dashboard save is kept.
+- Deleting or archiving a card does not delete its Notion page.
+
+**Troubleshooting**
+| Message next to the button | Cause and fix |
+|---|---|
+| The Notion token isn't set | `NOTION_TOKEN` or `NOTION_DATA_SOURCE_ID` is empty. Set it and redeploy (restart the dev server locally). |
+| Couldn't find the 'Content' database | The integration is not connected to the database, or `NOTION_DATA_SOURCE_ID` is wrong. Check step 2. |
+| The Notion token is invalid or lacks permission | Wrong token, or the integration lacks read/update/insert capabilities. |
+| Couldn't connect to Notion | Any other error. Make sure migration 0006 ran (without it, the page is created but the link is not saved on the card). |
 
 ### Testing on a phone (local)
 
